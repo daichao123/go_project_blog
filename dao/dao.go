@@ -8,8 +8,8 @@ import (
 )
 
 type Manager interface {
-	Register(user *model.User)
-	Update(id int, user *model.User)
+	Register(user *model.User) (id uint)
+	Update(id int, user *model.User) (RowsAffected int64)
 }
 
 type manager struct {
@@ -19,15 +19,16 @@ type manager struct {
 var Mgr Manager
 
 // Register 注册用户
-func (manager manager) Register(user *model.User) {
+func (manager manager) Register(user *model.User) (id uint) {
 	manager.db.Create(user)
+	return user.ID
 }
 
 // Update 更新指定字段
-func (manager manager) Update(id int, user *model.User) {
+func (manager manager) Update(id int, user *model.User) (RowsAffected int64) {
 	//manager.db.Debug().Where("id = ? ", id).Update("username", user.Username)
 	update := manager.db.Model(user).Where("id = ?", id).Update("username", user.Username)
-	log.Fatal(update.RowsAffected)
+	return update.RowsAffected
 }
 
 func init() {
