@@ -15,9 +15,9 @@ func TestController() {
 func Register(ctx *gin.Context) {
 	username := ctx.DefaultPostForm("username", "")
 	password := ctx.DefaultPostForm("password", "")
-	userFomat := model.User{
+	user := model.User{
 		Username: username,
 		Password: password,
 	}
-	dao.Mgr.Register(&userFomat)
+	dao.Mgr.Register(&user)
 }
